@@ -1,0 +1,91 @@
+TASK 3:-
+•	CREATE THE TABLE STUDENT:-
+Name- student.sql
+CREATE TABLE student (
+    student_id INT AUTO_INCREMENT PRIMARY KEY,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    date_of_birth DATE,
+    email VARCHAR(100) UNIQUE
+);
+•	INSERT DATA INTO TABLE STUDENT:-
+INSERT INTO student (first_name, last_name, date_of_birth, email)
+VALUES ('Bhavesh', 'Borekar', '2006-10-27', 'bhavesh@gmail.com'),
+       ('Sushil', 'Pandey', '2005-08-22', 'sushil@gmail.com'),
+       ('Payal', 'Khade', '2005-02-10', 'payal@gmail.com');
+•	SHOW THE TABLE STUDENT
+SELECT * FROM student;
+ 
+•	CREATE TABLE IN POSTRESQL:-
+CREATE TABLE student (
+    student_id SERIAL PRIMARY KEY,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    date_of_birth DATE,
+    email VARCHAR(100) UNIQUE
+);
+•	INSERT DATA INTO TABLE STUDENT:-
+INSERT INTO student (first_name, last_name, date_of_birth, email)
+VALUES ('Bhavesh', 'Borekar', '2006-10-27', 'bhavesh@gmail.com'),
+       ('Sushil', 'Pandey', '2005-08-22', 'sushil@gmail.com'),
+       ('Payal', 'Khade', '2005-02-10', 'payal@gmail.com');
+
+•	SHOW THE TABLE STUDENT
+SELECT * FROM student;
+ 
+•	Exploring the data into CSV  file 
+SELECT * FROM student
+INTO OUTFILE '/ C:\Users\User\Desktop/student.csv'
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n';
+•	Importing data from postgresql:
+COPY student(student_id, first_name, last_name, date_of_birth, email)
+FROM '// C:\Users\User\Desktop/student.csv'
+DELIMITER ','
+CSV HEADER;
+•	Verify Data in MySQL
+SELECT * FROM student;
+ 
+•	Verify Data in PostgreSQL:
+SELECT * FROM student;
+ 
+The data is found same so the process of migration is successfully completed.
+Data Migration Using pgLoader
+1.	Export Data from MySQL
+mysqldump -u mysql_user -p mysql_db student > student_data.sql
+2.	Import Data into PostgreSQL: 
+pgloader mysql://mysql_user:mysql_pass@localhost/mysql_db postgresql://postgres_user:postgres_pass@localhost/postgres_db
+ 
+Convert Stored Procedures and Functions
+1.	MySQL Stored Function:
+DELIMITER //
+CREATE FUNCTION get_user_by_dob(date_of_birth DATE) RETURNS VARCHAR(100)
+BEGIN
+    DECLARE user_name VARCHAR(100);
+    SELECT first_name INTO user_name FROM student WHERE date_of_birth = date_of_birth;
+    RETURN user_name;
+END //
+DELIMITER ;
+2. PostgreSQL Equivalent:
+CREATE FUNCTION get_user_by_dob(date_of_birth DATE) RETURNS VARCHAR(100) AS $$
+BEGIN
+    RETURN (SELECT first_name FROM student WHERE date_of_birth = date_of_birth);
+END;
+$$ LANGUAGE plpgsql;
+	mysql:-
+SELECT first_name FROM student 
+WHERE date_of_birth = '2006-10-27';
+ 
+	In PostgreSQL:
+	SELECT first_name FROM student 
+WHERE date_of_birth = '2006-10-27';
+ 
+	In MySQL:
+	SELECT COUNT(*) FROM student;
+ 
+	In PostgreSQL:
+	SELECT COUNT(*) FROM student;
+ 
+	Final Verification
+	SELECT * FROM student;
